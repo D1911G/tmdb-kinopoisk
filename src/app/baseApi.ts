@@ -8,6 +8,6 @@ export const baseApi = createApi({
       Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
     },
   }),
-  tagTypes: [],
+  tagTypes: ["Movie", "Favorite"],
   endpoints: () => ({}),
 });
