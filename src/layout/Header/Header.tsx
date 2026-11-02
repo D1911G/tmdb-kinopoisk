@@ -2,8 +2,17 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Path } from "../../common/Path";
 import logo from "../../assets/logo.svg";
+import { changeThemeModeAC, selectThemeMode } from "../../app/app-slice";
+import { useAppDispatch, useAppSelector } from "../../common/hooks";
 
 export default function Header() {
+  const dispatch = useAppDispatch();
+  const themeMode = useAppSelector(selectThemeMode);
+
+  const changeTheme = () => {
+    dispatch(changeThemeModeAC(themeMode === "light" ? "dark" : "light"));
+  };
+
   return (
     <div>
       <div>
@@ -44,7 +53,9 @@ export default function Header() {
           Favorites
         </NavLink>
       </div>
-      <button>LIGHT DARK THEME</button>
+      <button onClick={changeTheme}>
+        {themeMode === "light" ? "🌙" : "☀️"}
+      </button>
     </div>
   );
 }
