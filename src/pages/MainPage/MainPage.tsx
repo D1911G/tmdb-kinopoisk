@@ -1,3 +1,4 @@
+import MovieCard from "@/common/components/MovieCard";
 import { useGetPopularMoviesQuery } from "@/features/movies/api/moviesApi";
 
 export const MainPage = () => {
@@ -9,7 +10,9 @@ export const MainPage = () => {
   return (
     <div>
       {data?.results.map((movie) => (
-        <div key={movie.id}>{movie.title}</div>
+        // <div key={movie.id}>{movie.title}</div>
+
+        <MovieCard movie={movie} key={movie.id}></MovieCard>
       ))}
     </div>
   );
