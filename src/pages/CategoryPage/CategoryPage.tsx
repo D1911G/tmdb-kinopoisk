@@ -1,25 +1,102 @@
+import { useSearchParams } from "react-router-dom";
+import {
+  useGetPopularMoviesQuery,
+  useGetTopRatedMoviesQuery,
+  useGetUpcomingMoviesQuery,
+  useGetNowPlayingMoviesQuery,
+} from "@/features/movies/api/moviesApi";
 import MovieCard from "@/common/components/MovieCard";
-import { useGetPopularMoviesQuery } from "@/features/movies/api/moviesApi";
-import React from "react";
 
 export default function CategoryPage() {
-  const { data, isLoading, error } = useGetPopularMoviesQuery(1);
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error</div>;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get("category") || "popular";
+  const page = Number(searchParams.get("page")) || 1;
+
+  const { data: popularData, isLoading: isPopularLoading } =
+    useGetPopularMoviesQuery(page);
+  const { data: topRatedData, isLoading: isTopRatedLoading } =
+    useGetTopRatedMoviesQuery(page);
+  const { data: upcomingData, isLoading: isUpcomingLoading } =
+    useGetUpcomingMoviesQuery(page);
+  const { data: nowPlayingData, isLoading: isNowPlayingLoading } =
+    useGetNowPlayingMoviesQuery(page);
+
+  const categoryTitles = {
+    popular: "Popular Movies",
+    top_rated: "Top Rated Movies",
+    upcoming: "Upcoming Movies",
+    now_playing: "Now Playing Movies",
+  };
+
+  const dataMap = {
+    popular: { data: popularData, isLoading: isPopularLoading },
+    top_rated: { data: topRatedData, isLoading: isTopRatedLoading },
+    upcoming: { data: upcomingData, isLoading: isUpcomingLoading },
+    now_playing: { data: nowPlayingData, isLoading: isNowPlayingLoading },
+  };
+
+  const current = dataMap[category as keyof typeof dataMap] || dataMap.popular;
+
+  if (current.isLoading) return <div>Loading...</div>;
+
+  const changeCategory = (newCategory: string) => {
+    setSearchParams((prev) => ({ ...prev, category: newCategory, page: "1" }));
+  };
+  const changePage = (newPage: number) => {
+    setSearchParams((prev) => ({ ...prev, page: String(newPage) }));
+  };
+
   return (
     <div>
       <div>
-        <button>Popular movies</button>
-        <button>Top rated movies</button>
-        <button>Upcoming movies</button>
-        <button>Now playing movies</button>
+        <button
+          onClick={() => changeCategory("popular")}
+          disabled={category === "popular"}
+        >
+          Popular movies
+        </button>
+        <button
+          onClick={() => changeCategory("top_rated")}
+          disabled={category === "top_rated"}
+        >
+          Top rated movies
+        </button>
+        <button
+          onClick={() => changeCategory("upcoming")}
+          disabled={category === "upcoming"}
+        >
+          Upcoming movies
+        </button>
+        <button
+          onClick={() => changeCategory("now_playing")}
+          disabled={category === "now_playing"}
+        >
+          Now playing movies
+        </button>
       </div>
       <div>
-        {data?.results.map((movie) => (
-          <MovieCard movie={movie} key={movie.id}></MovieCard>
+        <h1>
+          {categoryTitles[category as keyof typeof categoryTitles] ||
+            categoryTitles.popular}
+        </h1>
+        {current.data?.results.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
-      <div>PAGINATION</div>
+      <div>
+        <button onClick={() => changePage(page - 1)} disabled={page === 1}>
+          Назад
+        </button>
+        <span>
+          Страница {page} из {current.data?.total_pages || 1}
+        </span>
+        <button
+          onClick={() => changePage(page + 1)}
+          disabled={page === current.data?.total_pages}
+        >
+          Вперед
+        </button>
+      </div>
     </div>
   );
 }
