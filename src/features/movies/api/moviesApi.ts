@@ -31,6 +31,16 @@ export const moviesApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Movie"],
     }),
+    searchMovies: builder.query<
+      MoviesResponse,
+      { query: string; page: number }
+    >({
+      query: ({ query, page = 1 }) => ({
+        url: "/search/movie",
+        params: { query, page },
+      }),
+      providesTags: ["Movie"],
+    }),
   }),
 });
 
@@ -39,4 +49,5 @@ export const {
   useGetTopRatedMoviesQuery,
   useGetUpcomingMoviesQuery,
   useGetNowPlayingMoviesQuery,
+  useSearchMoviesQuery,
 } = moviesApi;
