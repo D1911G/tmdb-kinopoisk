@@ -41,6 +41,15 @@ export const moviesApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Movie"],
     }),
+    getMovieDetails: builder.query<any, string>({
+      query: (id) => `/movie/${id}`,
+    }),
+    getMovieCredits: builder.query<any, string>({
+      query: (id) => `/movie/${id}/credits`,
+    }),
+    getSimilarMovies: builder.query<any, string>({
+      query: (id) => `/movie/${id}/similar`,
+    }),
   }),
 });
 
@@ -50,4 +59,7 @@ export const {
   useGetUpcomingMoviesQuery,
   useGetNowPlayingMoviesQuery,
   useSearchMoviesQuery,
+  useGetMovieDetailsQuery,
+  useGetMovieCreditsQuery,
+  useGetSimilarMoviesQuery,
 } = moviesApi;
