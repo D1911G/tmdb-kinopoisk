@@ -4,7 +4,7 @@ import {
   useGetMovieDetailsQuery,
   useGetSimilarMoviesQuery,
 } from "@/features/movies/api/moviesApi";
-
+import { MovieDetailsSkeleton } from "./MovieDetailsSkeleton";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function MovieDetailsPage() {
@@ -14,7 +14,7 @@ export default function MovieDetailsPage() {
   const { data: credits } = useGetMovieCreditsQuery(id!);
   const { data: similar } = useGetSimilarMoviesQuery(id!);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <MovieDetailsSkeleton />;
   if (!movie) return <div>Movie not found</div>;
 
   const cast = credits?.cast.slice(0, 6) || [];

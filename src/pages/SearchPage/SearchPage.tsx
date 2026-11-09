@@ -4,6 +4,7 @@ import { useSearchMoviesQuery } from "@/features/movies/api/moviesApi";
 import MovieCard from "@/common/components/MovieCard";
 import { useAppDispatch } from "@/common/hooks";
 import { baseApi } from "@/app/baseApi";
+import { MovieCardSkeleton } from "@/common/components/MovieCardSkeleton";
 
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -58,7 +59,15 @@ export default function SearchPage() {
       <div>
         {!query && <p>Enter a movie title to start searching.</p>}
 
-        {isLoading && <p>Loading...</p>}
+        {isLoading && (
+          <div>
+            {Array(20)
+              .fill(null)
+              .map((_, i) => (
+                <MovieCardSkeleton key={i} />
+              ))}
+          </div>
+        )}
 
         {error && <p>Error occurred</p>}
 

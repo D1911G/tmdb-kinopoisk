@@ -1,4 +1,5 @@
 import MovieCard from "@/common/components/MovieCard";
+import { MovieCardSkeleton } from "@/common/components/MovieCardSkeleton";
 import { Path } from "@/common/Path";
 import {
   useGetNowPlayingMoviesQuery,
@@ -55,7 +56,7 @@ export const MainPage = () => {
     navigate(`${Path.Search}?query=${searchQuery}`);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <div>Loading...</div>;
   if (hasError) return <div>Error</div>;
 
   return (
@@ -79,36 +80,76 @@ export const MainPage = () => {
           <h4>Popular movies</h4>
           <Link to={Path.Category}>View more</Link>
         </div>
-        {popularData?.results.slice(0, 6).map((movie) => (
-          <MovieCard movie={movie} key={movie.id}></MovieCard>
-        ))}
+        {isPopularLoading ? (
+          <div>
+            {Array(6)
+              .fill(null)
+              .map((_, i) => (
+                <MovieCardSkeleton key={i} />
+              ))}
+          </div>
+        ) : (
+          popularData?.results
+            .slice(0, 6)
+            .map((movie) => <MovieCard movie={movie} key={movie.id} />)
+        )}
       </div>
       <div>
         <div>
           <h4>Top rated movies</h4>
           <Link to={Path.Category}>View more</Link>
         </div>
-        {topRatedData?.results.slice(0, 6).map((movie) => (
-          <MovieCard movie={movie} key={movie.id}></MovieCard>
-        ))}
+        {isTopRatedLoading ? (
+          <div>
+            {Array(6)
+              .fill(null)
+              .map((_, i) => (
+                <MovieCardSkeleton key={i} />
+              ))}
+          </div>
+        ) : (
+          topRatedData?.results
+            .slice(0, 6)
+            .map((movie) => <MovieCard movie={movie} key={movie.id} />)
+        )}
       </div>
       <div>
         <div>
           <h4>Upcoming movies</h4>
           <Link to={Path.Category}>View more</Link>
         </div>
-        {upcomingData?.results.slice(0, 6).map((movie) => (
-          <MovieCard movie={movie} key={movie.id}></MovieCard>
-        ))}
+        {isUpcomingLoading ? (
+          <div>
+            {Array(6)
+              .fill(null)
+              .map((_, i) => (
+                <MovieCardSkeleton key={i} />
+              ))}
+          </div>
+        ) : (
+          upcomingData?.results
+            .slice(0, 6)
+            .map((movie) => <MovieCard movie={movie} key={movie.id} />)
+        )}
       </div>
       <div>
         <div>
           <h4>Now playing movies</h4>
           <Link to={Path.Category}>View more</Link>
         </div>
-        {nowPlayingData?.results.slice(0, 6).map((movie) => (
-          <MovieCard movie={movie} key={movie.id}></MovieCard>
-        ))}
+        {isNowPlayingLoading ? (
+          <div>
+            {Array(6)
+              .fill(null)
+              .map((_, i) => (
+                <MovieCardSkeleton key={i} />
+              ))}
+          </div>
+        ) : (
+          nowPlayingData?.results
+            .slice(0, 6)
+            .map((movie) => <MovieCard movie={movie} key={movie.id} />)
+        )}
       </div>
     </div>
   );

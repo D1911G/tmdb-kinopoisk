@@ -6,6 +6,7 @@ import {
   useGetNowPlayingMoviesQuery,
 } from "@/features/movies/api/moviesApi";
 import MovieCard from "@/common/components/MovieCard";
+import { MovieCardSkeleton } from "@/common/components/MovieCardSkeleton";
 
 export default function CategoryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,7 +38,7 @@ export default function CategoryPage() {
 
   const current = dataMap[category as keyof typeof dataMap] || dataMap.popular;
 
-  if (current.isLoading) return <div>Loading...</div>;
+  // if (current.isLoading) return <div>Loading...</div>;
 
   const changeCategory = (newCategory: string) => {
     setSearchParams((prev) => ({ ...prev, category: newCategory, page: "1" }));
@@ -79,9 +80,19 @@ export default function CategoryPage() {
           {categoryTitles[category as keyof typeof categoryTitles] ||
             categoryTitles.popular}
         </h1>
-        {current.data?.results.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
+        {current.isLoading ? (
+          <div>
+            {Array(20)
+              .fill(null)
+              .map((_, i) => (
+                <MovieCardSkeleton key={i} />
+              ))}
+          </div>
+        ) : (
+          current.data?.results.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))
+        )}
       </div>
       <div>
         <button onClick={() => changePage(page - 1)} disabled={page === 1}>
