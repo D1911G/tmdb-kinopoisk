@@ -8,6 +8,7 @@ import SearchPage from "../pages/SearchPage/SearchPage";
 import FavoritesPage from "../pages/FavoritesPage/FavoritesPage";
 import MovieDetailsPage from "../pages/MovieDetailsPage/MovieDetailsPage";
 import Error404 from "../pages/Error404/Error404";
+import { ErrorSnackbar } from "@/common/components/ErrorSnackbar/ErrorSnackbar";
 
 import { createTheme, ThemeProvider } from "@mui/material";
 import { selectThemeMode } from "./app-slice";
@@ -31,6 +32,7 @@ export const App = () => {
             <Route path="*" element={<Error404 />} />
           </Route>
         </Routes>
+        <ErrorSnackbar />
       </ThemeProvider>
     </>
   );

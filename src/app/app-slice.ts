@@ -10,11 +10,13 @@ type ThemeMode = "light" | "dark";
 type AppState = {
   themeMode: ThemeMode;
   isLoading: boolean;
+  error: string | null;
 };
 
 const initialState: AppState = {
   themeMode: (localStorage.getItem("themeMode") as ThemeMode) || "light",
   isLoading: false,
+  error: null,
 };
 
 export const appSlice = createSlice({
@@ -24,6 +26,9 @@ export const appSlice = createSlice({
     changeThemeModeAC: (state, action) => {
       state.themeMode = action.payload;
       localStorage.setItem("themeMode", action.payload);
+    },
+    setAppErrorAC: (state, action) => {
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -41,9 +46,11 @@ export const appSlice = createSlice({
   selectors: {
     selectThemeMode: (state) => state.themeMode,
     selectIsLoading: (state) => state.isLoading,
+    selectAppError: (state) => state.error,
   },
 });
 
-export const { changeThemeModeAC } = appSlice.actions;
-export const { selectThemeMode, selectIsLoading } = appSlice.selectors;
+export const { changeThemeModeAC, setAppErrorAC } = appSlice.actions;
+export const { selectThemeMode, selectIsLoading, selectAppError } =
+  appSlice.selectors;
 export const appReducer = appSlice.reducer;
