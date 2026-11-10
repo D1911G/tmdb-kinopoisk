@@ -50,6 +50,28 @@ export const moviesApi = baseApi.injectEndpoints({
     getSimilarMovies: builder.query<any, string>({
       query: (id) => `/movie/${id}/similar`,
     }),
+    getFilteredMovies: builder.query<
+      MoviesResponse,
+      {
+        sort_by: string;
+        vote_average_gte: number;
+        vote_average_lte: number;
+        with_genres: string;
+        page: number;
+      }
+    >({
+      query: (params) => ({
+        url: "/discover/movie",
+        params: {
+          sort_by: params.sort_by,
+          "vote_average.gte": params.vote_average_gte,
+          "vote_average.lte": params.vote_average_lte,
+          with_genres: params.with_genres,
+          page: params.page,
+        },
+      }),
+      providesTags: ["Movie"],
+    }),
   }),
 });
 
@@ -62,4 +84,5 @@ export const {
   useGetMovieDetailsQuery,
   useGetMovieCreditsQuery,
   useGetSimilarMoviesQuery,
+  useGetFilteredMoviesQuery,
 } = moviesApi;
