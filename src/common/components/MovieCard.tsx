@@ -7,7 +7,7 @@ import {
   selectFavorites,
   type FavoriteMovie,
 } from "@/features/favorites/model/favorites-slice";
-
+import s from "./MovieCard.module.css";
 type Props = {
   movie: Movie;
 };
@@ -42,12 +42,14 @@ export default function MovieCard({ movie }: Props) {
   };
 
   return (
-    <Link to={`/movie/${movie.id}`}>
-      <div>
-        <img src={posterUrl} alt={movie.title} />
-        <h3>{movie.title}</h3>
-        <span>{movie.vote_average}</span>
-        <button onClick={toggleFavorite}>{isFavorite ? "💖" : "🤍"}</button>
+    <Link to={`/movie/${movie.id}`} className={s.card}>
+      <img src={posterUrl} alt={movie.title} className={s.poster} />
+      <div className={s.info}>
+        <h3 className={s.title}>{movie.title}</h3>
+        <span className={s.rating}>{movie.vote_average.toFixed(1)}</span>
+        <button onClick={toggleFavorite} className={s.favoriteBtn}>
+          {isFavorite ? "💖" : "🤍"}
+        </button>
       </div>
     </Link>
   );

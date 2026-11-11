@@ -5,7 +5,7 @@ import MovieCard from "@/common/components/MovieCard";
 import { useAppDispatch } from "@/common/hooks";
 import { baseApi } from "@/app/baseApi";
 import { MovieCardSkeleton } from "@/common/components/MovieCardSkeleton";
-
+import s from "./SearchPage.module.css";
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("query") || "";
@@ -34,11 +34,11 @@ export default function SearchPage() {
   };
 
   return (
-    <div>
+    <div className={s.container}>
       <div>
         <h2>Search Results</h2>
       </div>
-      <div>
+      <div className={s.searchBox}>
         <input
           type="search"
           placeholder="Search for a movie"
@@ -56,7 +56,7 @@ export default function SearchPage() {
           Search
         </button>
       </div>
-      <div>
+      <div className={s.grid}>
         {!query && <p>Enter a movie title to start searching.</p>}
 
         {isLoading && (
@@ -76,11 +76,11 @@ export default function SearchPage() {
         )}
 
         {!isLoading && data && data.results.length > 0 && (
-          <div>
+          <>
             {data.results.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
-          </div>
+          </>
         )}
       </div>
       {!isLoading && data && data.results.length > 0 && (

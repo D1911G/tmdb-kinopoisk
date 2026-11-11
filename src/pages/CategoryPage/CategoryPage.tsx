@@ -7,7 +7,7 @@ import {
 } from "@/features/movies/api/moviesApi";
 import MovieCard from "@/common/components/MovieCard";
 import { MovieCardSkeleton } from "@/common/components/MovieCardSkeleton";
-
+import s from "./CategoryPage.module.css";
 export default function CategoryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category") || "popular";
@@ -48,8 +48,8 @@ export default function CategoryPage() {
   };
 
   return (
-    <div>
-      <div>
+    <div className={s.container}>
+      <div className={s.buttons}>
         <button
           onClick={() => changeCategory("popular")}
           disabled={category === "popular"}
@@ -76,7 +76,7 @@ export default function CategoryPage() {
         </button>
       </div>
       <div>
-        <h1>
+        <h1 className={s.title}>
           {categoryTitles[category as keyof typeof categoryTitles] ||
             categoryTitles.popular}
         </h1>
@@ -89,12 +89,14 @@ export default function CategoryPage() {
               ))}
           </div>
         ) : (
-          current.data?.results.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))
+          <div className={s.grid}>
+            {current.data?.results.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
         )}
       </div>
-      <div>
+      <div className={s.pagination}>
         <button onClick={() => changePage(page - 1)} disabled={page === 1}>
           Назад
         </button>

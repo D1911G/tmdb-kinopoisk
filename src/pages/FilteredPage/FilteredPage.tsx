@@ -2,6 +2,9 @@ import { useSearchParams } from "react-router-dom";
 import { useGetFilteredMoviesQuery } from "@/features/movies/api/moviesApi";
 import MovieCard from "@/common/components/MovieCard";
 import { useEffect, useState } from "react";
+import s from "./FilteredPage.module.css";
+import { MovieCardSkeleton } from "@/common/components/MovieCardSkeleton";
+
 const GENRES = [
   { id: 28, name: "Action" },
   { id: 12, name: "Adventure" },
@@ -96,9 +99,9 @@ export default function FilteredPage() {
   }, [localFrom, localTo]);
 
   return (
-    <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
+    <div className={s.container}>
       {/* ЛЕВАЯ КОЛОНКА — ФИЛЬТРЫ */}
-      <div style={{ width: "250px", flexShrink: 0 }}>
+      <div className={s.sidebar}>
         <h3>Filters</h3>
 
         {/* Сортировка */}
@@ -155,20 +158,14 @@ export default function FilteredPage() {
         <div style={{ marginTop: "20px" }}>
           <label>Genres</label>
           <div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+            <div className={s.genresContainer}>
               {GENRES.map((genre) => {
                 const isActive = genres.split(",").includes(String(genre.id));
                 return (
                   <button
                     key={genre.id}
                     onClick={() => toggleGenre(genre.id)}
-                    style={{
-                      backgroundColor: isActive ? "blue" : "transparent",
-                      color: isActive ? "white" : "black",
-                      border: "1px solid black",
-                      padding: "4px 8px",
-                      cursor: "pointer",
-                    }}
+                    className={`${s.genreBtn} ${isActive ? s.genreBtnActive : ""}`}
                   >
                     {genre.name}
                   </button>
@@ -184,13 +181,15 @@ export default function FilteredPage() {
         </button>
       </div>
       {/* //результаты */}
-      <div style={{ flex: 1 }}>
+      <div className={s.results}>
         <h2>Filtered Movies</h2>
 
         {/* Карточки */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+        <div className={s.grid}>
           {isLoading ? (
-            <div>Loading...</div> // (позже заменим на скелетоны)
+            Array(20)
+              .fill(null)
+              .map((_, i) => <MovieCardSkeleton key={i} />)
           ) : data?.results.length === 0 ? (
             <p>No movies found with these filters.</p>
           ) : (
@@ -202,7 +201,7 @@ export default function FilteredPage() {
 
         {/* Пагинация */}
         {data && data.total_pages > 0 && (
-          <div style={{ marginTop: "20px" }}>
+          <div className={s.pagination}>
             <button
               onClick={() => {
                 const newParams = new URLSearchParams(searchParams);

@@ -1,8 +1,7 @@
+import s from "./Footer.module.css";
 export default function Footer() {
   return (
-    <footer
-      style={{ textAlign: "center", padding: "20px", background: "#f0f0f0" }}
-    >
+    <footer className={s.footer}>
       <p>© 2025 Kinopoisk Demo · Data courtesy of TMDB.</p>
     </footer>
   );

@@ -6,6 +6,7 @@ import {
 } from "@/features/movies/api/moviesApi";
 import { MovieDetailsSkeleton } from "./MovieDetailsSkeleton";
 import { useNavigate, useParams } from "react-router-dom";
+import s from "./MovieDetailsPage.module.css";
 
 export default function MovieDetailsPage() {
   const { id } = useParams();
@@ -25,45 +26,59 @@ export default function MovieDetailsPage() {
     : "https://placehold.co/500x750";
 
   return (
-    <div>
-      <button onClick={() => navigate(-1)}>Назад</button>
-      <img src={posterUrl} alt={movie.title} />
-      <h1>{movie.title}</h1>
-      <p>Год: {movie.release_date?.slice(0, 4)}</p>
-      <p>Рейтинг: {movie.vote_average}</p>
-      <p>
-        Жанры: {movie.genres?.map((g: { name: string }) => g.name).join(", ")}
-      </p>
-      <p>Продолжительность: {movie.runtime} мин.</p>
-      <p>{movie.overview}</p>
-      <h2>Cast</h2>
-      <div>
-        {cast.map(
-          (actor: {
-            id: number;
-            name: string;
-            character: string;
-            profile_path: string | null;
-          }) => {
-            const photo = actor.profile_path
-              ? `${import.meta.env.VITE_TMDB_IMAGE_URL}/w200${actor.profile_path}`
-              : "https://placehold.co/200x300";
+    <div className={s.container}>
+      <button className={s.backBtn} onClick={() => navigate(-1)}>
+        ← Назад
+      </button>
 
-            return (
-              <div key={actor.id}>
-                <img src={photo} alt={actor.name} />
-                <p>{actor.name}</p>
-                <p>{actor.character}</p>
-              </div>
-            );
-          },
-        )}
+      <div className={s.movieInfo}>
+        <img src={posterUrl} alt={movie.title} className={s.poster} />
+        <div className={s.info}>
+          <h1>{movie.title}</h1>
+          <p>Год: {movie.release_date?.slice(0, 4)}</p>
+          <p>Рейтинг: {movie.vote_average}</p>
+          <p>
+            Жанры:{" "}
+            {movie.genres?.map((g: { name: string }) => g.name).join(", ")}
+          </p>
+          <p>Продолжительность: {movie.runtime} мин.</p>
+          <p>{movie.overview}</p>
+        </div>
       </div>
-      <h2>Similar Movies</h2>
-      <div>
-        {similarMovies.map((m: any) => (
-          <MovieCard key={m.id} movie={m} />
-        ))}
+
+      <div className={s.castSection}>
+        <h2>Cast</h2>
+        <div className={s.castGrid}>
+          {cast.map(
+            (actor: {
+              id: number;
+              name: string;
+              character: string;
+              profile_path: string | null;
+            }) => {
+              const photo = actor.profile_path
+                ? `${import.meta.env.VITE_TMDB_IMAGE_URL}/w200${actor.profile_path}`
+                : "https://placehold.co/200x300";
+
+              return (
+                <div key={actor.id} className={s.castCard}>
+                  <img src={photo} alt={actor.name} className={s.castImg} />
+                  <p className={s.castName}>{actor.name}</p>
+                  <p className={s.castCharacter}>{actor.character}</p>
+                </div>
+              );
+            },
+          )}
+        </div>
+      </div>
+
+      <div className={s.similarSection}>
+        <h2>Similar Movies</h2>
+        <div className={s.similarGrid}>
+          {similarMovies.map((m: any) => (
+            <MovieCard key={m.id} movie={m} />
+          ))}
+        </div>
       </div>
     </div>
   );

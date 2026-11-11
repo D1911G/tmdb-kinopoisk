@@ -9,6 +9,7 @@ import {
 } from "@/features/movies/api/moviesApi";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import s from "./MainPage.module.css"; // 👈 Импорт стилей
 
 export const MainPage = () => {
   const {
@@ -32,11 +33,6 @@ export const MainPage = () => {
     error: nowPlayingError,
   } = useGetNowPlayingMoviesQuery(1);
 
-  // const isLoading =
-  //   isPopularLoading ||
-  //   isTopRatedLoading ||
-  //   isUpcomingLoading ||
-  //   isNowPlayingLoading;
   const hasError =
     popularError || topRatedError || upcomingError || nowPlayingError;
 
@@ -46,25 +42,30 @@ export const MainPage = () => {
       Math.floor(Math.random() * popularData.results.length)
     ];
   }, [popularData]);
+
   const backdropUrl = randomMovie?.backdrop_path
     ? `${import.meta.env.VITE_TMDB_IMAGE_URL}/original${randomMovie.backdrop_path}`
     : "";
 
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
   const handleSearch = () => {
     navigate(`${Path.Search}?query=${searchQuery}`);
   };
 
-  // if (isLoading) return <div>Loading...</div>;
-  if (hasError) return <div>Error</div>;
+  if (hasError) return <div className={s.error}>Error</div>;
 
   return (
-    <div>
-      <div style={{ backgroundImage: `url(${backdropUrl})` }}>
+    <div className={s.container}>
+      {/* Welcome Section */}
+      <div
+        className={s.hero}
+        style={{ backgroundImage: `url(${backdropUrl})` }}
+      >
         <h1>WELCOME!</h1>
         <h3>Browse highlighted titles from TMDB</h3>
-        <div>
+        <div className={s.searchBox}>
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -75,81 +76,73 @@ export const MainPage = () => {
           </button>
         </div>
       </div>
-      <div>
-        <div>
+
+      {/* Popular */}
+      <div className={s.section}>
+        <div className={s.sectionHeader}>
           <h4>Popular movies</h4>
           <Link to={Path.Category}>View more</Link>
         </div>
-        {isPopularLoading ? (
-          <div>
-            {Array(6)
-              .fill(null)
-              .map((_, i) => (
-                <MovieCardSkeleton key={i} />
-              ))}
-          </div>
-        ) : (
-          popularData?.results
-            .slice(0, 6)
-            .map((movie) => <MovieCard movie={movie} key={movie.id} />)
-        )}
+        <div className={s.grid}>
+          {isPopularLoading
+            ? Array(6)
+                .fill(null)
+                .map((_, i) => <MovieCardSkeleton key={i} />)
+            : popularData?.results
+                .slice(0, 6)
+                .map((movie) => <MovieCard movie={movie} key={movie.id} />)}
+        </div>
       </div>
-      <div>
-        <div>
+
+      {/* Top Rated */}
+      <div className={s.section}>
+        <div className={s.sectionHeader}>
           <h4>Top rated movies</h4>
           <Link to={Path.Category}>View more</Link>
         </div>
-        {isTopRatedLoading ? (
-          <div>
-            {Array(6)
-              .fill(null)
-              .map((_, i) => (
-                <MovieCardSkeleton key={i} />
-              ))}
-          </div>
-        ) : (
-          topRatedData?.results
-            .slice(0, 6)
-            .map((movie) => <MovieCard movie={movie} key={movie.id} />)
-        )}
+        <div className={s.grid}>
+          {isTopRatedLoading
+            ? Array(6)
+                .fill(null)
+                .map((_, i) => <MovieCardSkeleton key={i} />)
+            : topRatedData?.results
+                .slice(0, 6)
+                .map((movie) => <MovieCard movie={movie} key={movie.id} />)}
+        </div>
       </div>
-      <div>
-        <div>
+
+      {/* Upcoming */}
+      <div className={s.section}>
+        <div className={s.sectionHeader}>
           <h4>Upcoming movies</h4>
           <Link to={Path.Category}>View more</Link>
         </div>
-        {isUpcomingLoading ? (
-          <div>
-            {Array(6)
-              .fill(null)
-              .map((_, i) => (
-                <MovieCardSkeleton key={i} />
-              ))}
-          </div>
-        ) : (
-          upcomingData?.results
-            .slice(0, 6)
-            .map((movie) => <MovieCard movie={movie} key={movie.id} />)
-        )}
+        <div className={s.grid}>
+          {isUpcomingLoading
+            ? Array(6)
+                .fill(null)
+                .map((_, i) => <MovieCardSkeleton key={i} />)
+            : upcomingData?.results
+                .slice(0, 6)
+                .map((movie) => <MovieCard movie={movie} key={movie.id} />)}
+        </div>
       </div>
-      <div>
-        <div>
+
+      {/* Now Playing */}
+      <div className={s.section}>
+        <div className={s.sectionHeader}>
           <h4>Now playing movies</h4>
           <Link to={Path.Category}>View more</Link>
         </div>
-        {isNowPlayingLoading ? (
-          <div>
-            {Array(6)
-              .fill(null)
-              .map((_, i) => (
-                <MovieCardSkeleton key={i} />
-              ))}
-          </div>
-        ) : (
-          nowPlayingData?.results
-            .slice(0, 6)
-            .map((movie) => <MovieCard movie={movie} key={movie.id} />)
-        )}
+        <div className={s.grid}>
+          {isNowPlayingLoading
+            ? Array(6)
+                .fill(null)
+                .map((_, i) => <MovieCardSkeleton key={i} />)
+            : nowPlayingData?.results
+                .slice(0, 6)
+                .map((movie) => <MovieCard movie={movie} key={movie.id} />)}
+        </div>
       </div>
     </div>
   );
