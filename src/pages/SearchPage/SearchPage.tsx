@@ -17,7 +17,7 @@ export default function SearchPage() {
     setInputValue(query);
   }, [query]);
 
-  const { data, isLoading, isFetching, error } = useSearchMoviesQuery(
+  const { data, isLoading, error } = useSearchMoviesQuery(
     { query, page },
     { skip: !query },
   );

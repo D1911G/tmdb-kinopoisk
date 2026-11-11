@@ -32,11 +32,11 @@ export const MainPage = () => {
     error: nowPlayingError,
   } = useGetNowPlayingMoviesQuery(1);
 
-  const isLoading =
-    isPopularLoading ||
-    isTopRatedLoading ||
-    isUpcomingLoading ||
-    isNowPlayingLoading;
+  // const isLoading =
+  //   isPopularLoading ||
+  //   isTopRatedLoading ||
+  //   isUpcomingLoading ||
+  //   isNowPlayingLoading;
   const hasError =
     popularError || topRatedError || upcomingError || nowPlayingError;
 

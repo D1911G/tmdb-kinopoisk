@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type FavoriteMovie = {
+export type FavoriteMovie = {
   id: number;
   title: string;
   poster_path: string | null;
@@ -17,7 +17,7 @@ const loadFavorites = () => {
 };
 
 const initialState = {
-  favorites: loadFavorites(),
+  favorites: loadFavorites() as FavoriteMovie[],
 };
 
 export const favoriteSlice = createSlice({
@@ -26,7 +26,9 @@ export const favoriteSlice = createSlice({
   reducers: {
     addFavoriteAC: (state, action) => {
       const movie = action.payload;
-      const isExist = state.favorites.some((m) => m.id === movie.id);
+      const isExist = state.favorites.some(
+        (m: FavoriteMovie) => m.id === movie.id,
+      );
       if (!isExist) {
         state.favorites.push(movie);
         localStorage.setItem("favorites", JSON.stringify(state.favorites));
@@ -34,7 +36,9 @@ export const favoriteSlice = createSlice({
     },
     removeFavoriteAC: (state, action) => {
       const id = action.payload;
-      state.favorites = state.favorites.filter((m) => m.id !== id);
+      state.favorites = state.favorites.filter(
+        (m: FavoriteMovie) => m.id !== id,
+      );
       localStorage.setItem("favorites", JSON.stringify(state.favorites));
     },
   },

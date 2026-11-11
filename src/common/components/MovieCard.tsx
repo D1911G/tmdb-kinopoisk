@@ -5,6 +5,7 @@ import {
   addFavoriteAC,
   removeFavoriteAC,
   selectFavorites,
+  type FavoriteMovie,
 } from "@/features/favorites/model/favorites-slice";
 
 type Props = {
@@ -19,7 +20,9 @@ export default function MovieCard({ movie }: Props) {
   const dispatch = useAppDispatch();
   const favorites = useAppSelector(selectFavorites);
 
-  const isFavorite = favorites.some((fav) => fav.id === movie.id);
+  const isFavorite = favorites.some(
+    (fav: FavoriteMovie) => fav.id === movie.id,
+  );
   const toggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();

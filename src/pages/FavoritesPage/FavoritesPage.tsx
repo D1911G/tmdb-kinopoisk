@@ -1,5 +1,8 @@
 import { useAppSelector } from "@/common/hooks";
-import { selectFavorites } from "@/features/favorites/model/favorites-slice";
+import {
+  selectFavorites,
+  type FavoriteMovie,
+} from "@/features/favorites/model/favorites-slice";
 import MovieCard from "@/common/components/MovieCard";
 
 export default function FavoritesPage() {
@@ -12,7 +15,7 @@ export default function FavoritesPage() {
         <p>No favorite movies yet.</p>
       ) : (
         <div>
-          {favorites.map((movie) => (
+          {favorites.map((movie: FavoriteMovie) => (
             <MovieCard key={movie.id} movie={movie as any} />
           ))}
         </div>

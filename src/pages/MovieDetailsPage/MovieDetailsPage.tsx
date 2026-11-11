@@ -31,28 +31,37 @@ export default function MovieDetailsPage() {
       <h1>{movie.title}</h1>
       <p>Год: {movie.release_date?.slice(0, 4)}</p>
       <p>Рейтинг: {movie.vote_average}</p>
-      <p>Жанры: {movie.genres?.map((g) => g.name).join(", ")}</p>
+      <p>
+        Жанры: {movie.genres?.map((g: { name: string }) => g.name).join(", ")}
+      </p>
       <p>Продолжительность: {movie.runtime} мин.</p>
       <p>{movie.overview}</p>
       <h2>Cast</h2>
       <div>
-        {cast.map((actor) => {
-          const photo = actor.profile_path
-            ? `${import.meta.env.VITE_TMDB_IMAGE_URL}/w200${actor.profile_path}`
-            : "https://placehold.co/200x300";
+        {cast.map(
+          (actor: {
+            id: number;
+            name: string;
+            character: string;
+            profile_path: string | null;
+          }) => {
+            const photo = actor.profile_path
+              ? `${import.meta.env.VITE_TMDB_IMAGE_URL}/w200${actor.profile_path}`
+              : "https://placehold.co/200x300";
 
-          return (
-            <div key={actor.id}>
-              <img src={photo} alt={actor.name} />
-              <p>{actor.name}</p>
-              <p>{actor.character}</p>
-            </div>
-          );
-        })}
+            return (
+              <div key={actor.id}>
+                <img src={photo} alt={actor.name} />
+                <p>{actor.name}</p>
+                <p>{actor.character}</p>
+              </div>
+            );
+          },
+        )}
       </div>
       <h2>Similar Movies</h2>
       <div>
-        {similarMovies.map((m) => (
+        {similarMovies.map((m: any) => (
           <MovieCard key={m.id} movie={m} />
         ))}
       </div>
